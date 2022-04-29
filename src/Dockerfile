@@ -5,7 +5,7 @@ ARG GITHUB_RUNNER_VERSION="2.290.1"
 
 # Updating and installing dependencies:
 RUN apt-get update && apt-get upgrade -y
-RUN apt-get install -y curl git jq bash
+RUN apt-get install -y curl git jq bash docker
 
 RUN rm -rf /var/lib/apt/lists/*
 
