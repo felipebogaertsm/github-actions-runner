@@ -16,16 +16,6 @@ RUN apt-get install -y \
     gnupg \
     lsb-release
 
-# Installing docker:
-RUN curl -fsSL https://download.docker.com/linux/ubuntu/gpg | \
-    gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg
-RUN echo \
-    "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/ubuntu \
-    $(lsb_release -cs) stable" | tee /etc/apt/sources.list.d/docker.list > /dev/null
-RUN apt-get install -y \
-    docker \
-    docker.io
-
 RUN rm -rf /var/lib/apt/lists/*
 
 WORKDIR /usr/github
@@ -39,9 +29,11 @@ RUN /bin/bash ./bin/installdependencies.sh
 COPY ./entrypoint.sh ./
 RUN chmod u+x ./entrypoint.sh
 
-# New user for security:
-RUN useradd -M github
-RUN usermod -aG sudo github
+# Installing docker:
+RUN curl -fsSL https://get.docker.com | sh
+
+# New user and group for security:
+RUN useradd -m github
 RUN usermod -aG docker github
 RUN chown -R github:github ./
 USER github
