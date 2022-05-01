@@ -17,7 +17,8 @@ spec:
     spec:
       containers:
         - name: github-runner
-          image: felipebogaerts/github-actions-runner:latest
+          image: felipebogaertsm/github-actions-runner:latest
+          imagePullPolicy: Always
           env:
             - name: GITHUB_OWNER
               valueFrom:
@@ -39,3 +40,15 @@ spec:
                 secretKeyRef:
                   name: github-actions-secrets
                   key: work_dir
+          volumeMounts:
+          - name: dockersock
+            mountPath: /var/run/docker.sock
+          - name: workdir
+            mountPath: /tmp/github-runner-your-repo
+      volumes:
+      - name: dockersock
+        hostPath:
+          path: /var/run/docker.sock
+      - name: workdir
+        hostPath:
+          path: /tmp/github-runner-your-repo
